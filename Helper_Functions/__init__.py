@@ -1,17 +1,22 @@
 import numpy as np
+import pandas as pd
 
-def reduce_mem_usage(df, obj_to_cat=False):
+def reduce_mem_usage(df, obj_to_cat=False, copy=False):
     """ iterate through all the columns of a dataframe and modify the data type
         to reduce memory usage.
+        obj_to_cat: turn 'object' cols to 'category'
+        copy: copies dataframe to not mess with original df.
     """
-    start_mem = df.memory_usage().sum() / 1024**2
+    if copy:
+        df = df.copy()
 
     for col in df.columns:
         col_type = df[col].dtype.name
         if 'datetime' in col_type:
             pass
         elif col_type == 'object':
-            df[col] = df[col].astype('category')
+            if obj_to_cat:
+                df[col] = df[col].astype('category')
         elif col_type == 'category':
             pass
         else:

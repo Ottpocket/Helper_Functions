@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 
-def reduce_mem_usage(df, obj_to_cat=False, inplace=False):
+def reduce_mem_usage(df, obj_to_cat=False, inplace=True):
     """ iterate through all the columns of a dataframe and modify the data type
         to reduce memory usage.
         obj_to_cat: turn 'object' cols to 'category'
-        copy: copies dataframe to not mess with original df.
+        inplace: inplace dataframe to not mess with original df.
     """
     if not inplace:
         df = df.copy()

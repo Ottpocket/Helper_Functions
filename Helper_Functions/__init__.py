@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import datetime
 
 def reduce_mem_usage(df, obj_to_cat=False, inplace=True):
     """ iterate through all the columns of a dataframe and modify the data type
@@ -40,7 +41,7 @@ def reduce_mem_usage(df, obj_to_cat=False, inplace=True):
                     df[col] = df[col].astype(np.float64)
     if not inplace:
         return df
-  
+
 
 
 def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'month'):
@@ -56,20 +57,20 @@ def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'm
 
     #end_date = '2021-03-01'
     start_y, start_m, start_d = [int(i) for i in end_date.split('-')]
-    end_date = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)    
+    end_date = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)
 
     #test_start = '2007-01-01'
     start_y, start_m, start_d = [int(i) for i in test_start.split('-')]
-    current = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)    
+    current = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)
 
     TEST_DATES = []
     while current <= end_date:
         if intervals == 'month':
-            next_interval = current + relativedelta(months=1)   
+            next_interval = current + relativedelta(months=1)
         elif intervals == 'year':
             next_interval = current + relativedelta(years=1)
         train_start = current - relativedelta(years=5)
-        
+
         if next_interval > end_date:
             result.append((train_start.isoformat(), current.isoformat(), end_date.isoformat()))
         else:

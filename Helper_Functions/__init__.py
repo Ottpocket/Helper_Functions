@@ -40,3 +40,39 @@ def reduce_mem_usage(df, obj_to_cat=False, inplace=True):
                     df[col] = df[col].astype(np.float64)
     if not inplace:
         return df
+  
+
+
+def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'month'):
+    #TODO: val not working
+    #TODO: '2week' interval
+    #INPUTS:
+        #end_date: (str 'yyyy-mm-dd') final date of testing
+        #test_start: (str 'yyyy-mm-dd') first date of testing
+        #train_years: (int) how many years of data to use in training
+        #interval: ('month' or 'year') getting a new interval every month
+
+    result = []
+
+    #end_date = '2021-03-01'
+    start_y, start_m, start_d = [int(i) for i in end_date.split('-')]
+    end_date = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)    
+
+    #test_start = '2007-01-01'
+    start_y, start_m, start_d = [int(i) for i in test_start.split('-')]
+    current = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)    
+
+    TEST_DATES = []
+    while current <= end_date:
+        if intervals == 'month':
+            next_interval = current + relativedelta(months=1)   
+        elif intervals == 'year':
+            next_interval = current + relativedelta(years=1)
+        train_start = current - relativedelta(years=5)
+        
+        if next_interval > end_date:
+            result.append((train_start.isoformat(), current.isoformat(), end_date.isoformat()))
+        else:
+            result.append((train_start.isoformat(), current.isoformat(), next_interval.isoformat()))
+        current = next_interval
+    return result

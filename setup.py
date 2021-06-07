@@ -5,5 +5,5 @@ setup(
     version = '0.1',
     url ='https://github.com/Ottpocket/Helper_Functions',
     packages=['Helper_Functions'],
-    install_requires=['numpy','pandas', 'datetime']
+    install_requires=['numpy','pandas', 'datetime', 'dateutil']
 )

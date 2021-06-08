@@ -56,11 +56,11 @@ def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'm
 
     result = []
 
-    #end_date = '2021-03-01'
-    start_y, start_m, start_d = [int(i) for i in end_date.split('-')]
-    end_date = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)
+    #Getting DateTime format of last day
+    end_y, end_m, end_d = [int(i) for i in end_date.split('-')]
+    end_date = datetime.date(end_y, end_m, end_d)#(2010, 8, 1)
 
-    #test_start = '2007-01-01'
+    #Getting DateTime format of first testing day
     start_y, start_m, start_d = [int(i) for i in test_start.split('-')]
     current = datetime.date(start_y, start_m, start_d)#(2010, 8, 1)
 
@@ -70,7 +70,7 @@ def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'm
             next_interval = current + relativedelta(months=1)
         elif intervals == 'year':
             next_interval = current + relativedelta(years=1)
-        train_start = current - relativedelta(years=5)
+        train_start = current - relativedelta(years=train_years)
 
         if next_interval > end_date:
             result.append((train_start.isoformat(), current.isoformat(), end_date.isoformat()))

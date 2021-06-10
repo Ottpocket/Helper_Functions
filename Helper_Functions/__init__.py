@@ -45,14 +45,20 @@ def reduce_mem_usage(df, obj_to_cat=False, inplace=True):
 
 
 
-def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'month'):
+def get_val_test_increments(end_date, test_start, train_months = 6,intervals = 'month'):
+    '''
+    Outputs a list of tuples of (train_start, test_start, test_end).
+    Each tuple increments by the either 1 year or 1 month.
+    INPUTS:
+        end_date: ("yyyy-mm-dd") final day of testing
+        test_start: ("yyyy-mm-dd") beginning day of testing
+        train_months: (int)  # of months to train before test_start
+        intervals: ('year' or 'month') the difference between train_start in
+            2 consecutive tuples.  i.e. 2019-01-01 to 2019-02-01 or
+                                        2019-01-01 to 2020-01-01
+    '''
     #TODO: val not working
     #TODO: '2week' interval
-    #INPUTS:
-        #end_date: (str 'yyyy-mm-dd') final date of testing
-        #test_start: (str 'yyyy-mm-dd') first date of testing
-        #train_years: (int) how many years of data to use in training
-        #interval: ('month' or 'year') getting a new interval every month
 
     result = []
 
@@ -70,7 +76,7 @@ def get_val_test_increments(end_date, test_start, train_years = 5,intervals = 'm
             next_interval = current + relativedelta(months=1)
         elif intervals == 'year':
             next_interval = current + relativedelta(years=1)
-        train_start = current - relativedelta(years=train_years)
+        train_start = current - relativedelta(years=train_months)
 
         if next_interval > end_date:
             result.append((train_start.isoformat(), current.isoformat(), end_date.isoformat()))

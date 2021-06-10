@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import datetime
+import gc
 from time import time
 from dateutil.relativedelta import relativedelta
 

@@ -107,7 +107,7 @@ def get_preds(stonks, test_start, end_date, train_months, intervals, model,
     TEST_DATES = get_val_test_increments(end_date = end_date, test_start = test_start,
                                          train_months = train_months, intervals = intervals)
 
-    for i, (train_start, test_start, test_finish) in tqdm(enumerate(TEST_DATES)):
+    for i, (train_start, test_start, test_finish) in enumerate(TEST_DATES):
         start_iter = time()
         print(f'iteration {i + 1} of {len(TEST_DATES)}, ', end='')
 

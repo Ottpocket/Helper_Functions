@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import datetime
+from time import time
 from dateutil.relativedelta import relativedelta
 
 def reduce_mem_usage(df, obj_to_cat=False, inplace=True):

@@ -84,3 +84,55 @@ def get_val_test_increments(end_date, test_start, train_months = 6,intervals = '
             result.append((train_start.isoformat(), current.isoformat(), next_interval.isoformat()))
         current = next_interval
     return result
+
+def get_preds(stonks, test_start, end_date, train_months, intervals, model,
+             FEATURES, TARGET, val_period = None):
+    '''
+    get_preds: Trains model from set start date to set stop date.  Tests over next specified time period.
+    Does this until specified end date.
+    Adds a 'preds' column to 'stonks' dataframe inplace.
+    INPUTS:
+        stonks: (df) dataframe of stocks
+        test_start_date: ('yyyy-mm-dd') date beginning test data
+        end_date: ('yyyy-mm-dd') final date in test data
+        train_months: (int) number of years to be used for training prior to test start
+        intervals: ('2week','month','year') how often to test data
+        model: model that has a fit and predict method
+        val_period: (int) number of days prior to test with which to validate
+    '''
+
+    stonks['preds'] = -99
+
+    #Gives list of tuples.  Each tuple is start and end dates for test
+    TEST_DATES = get_val_test_increments(end_date = end_date, test_start = test_start,
+                                         train_months = train_months, intervals = intervals)
+
+    for i, (train_start, test_start, test_finish) in tqdm(enumerate(TEST_DATES)):
+        start_iter = time()
+        print(f'iteration {i + 1} of {len(TEST_DATES)}, ', end='')
+
+        #Creating temporary train
+        msk = (stonks.day < test_start) & (stonks['day'] > train_start) & (~stonks[TARGET].isnull())
+        train = np.zeros( (np.sum(msk), len(FEATURES)), dtype=np.float32)
+        for col_idx, feat in enumerate(FEATURES):
+            train[:,col_idx] = stonks.loc[msk, feat].values.astype(np.float32)
+
+        train_TARGET = stonks.loc[msk, TARGET].values
+        del msk; gc.collect()
+
+        #Creating temporary test
+        test_msk = (stonks.day>=test_start) & (stonks.day <= test_finish) & (~stonks[TARGET].isnull())
+        test = np.zeros( (np.sum(test_msk), len(FEATURES)), dtype=np.float32)
+        for col_idx, feat in enumerate(FEATURES):
+            test[:,col_idx] = stonks.loc[test_msk, feat].values.astype(np.float32)
+
+        #Getting preds if test exists
+        if test.shape[0] >0:
+
+            #Training model
+            model.fit(train, train_TARGET)
+            index_for_true_probs = list(model.classes_).index(True)
+            stonks.loc[test_msk, 'preds'] = model.predict_proba(test)[:, index_for_true_probs]
+
+        print(f' {time() - start_iter :.2f} seconds.')
+        del train, test, test_msk; gc.collect()

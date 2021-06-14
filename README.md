@@ -8,3 +8,5 @@ import Helper_Functions
 This was created with the help of the following sites:
 https://uoftcoders.github.io/studyGroup/lessons/python/packages/lesson/
 https://dev.to/rf_schubert/how-to-create-a-pip-package-and-host-on-private-github-repo-58pa
+
+https://alpaca.markets/docs/get-started-with-alpaca/daytrading-momentum/

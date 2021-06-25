@@ -152,7 +152,7 @@ def create_json(model_name, DIRECTORY = '/home/aott/Documents/python_scripts/kag
     model_name: (str) the model to be ran on kaggle
     DIRECTORY: (str) directory to put new folder, 'model_name', w/ json
     '''
-    
+
     TRIAL_NAME = sys.argv[1]
     KAGGLE_NAME = 'Ottpocket' #sys.argv[2]
 
@@ -183,4 +183,4 @@ def create_json(model_name, DIRECTORY = '/home/aott/Documents/python_scripts/kag
     jsonString = json.dumps(json_dict)
     jsonFile = open(json_path, "w")
     jsonFile.write(jsonString)
-    jsonFile.close()TRIAL_NAME
+    jsonFile.close()

@@ -4,6 +4,9 @@ import datetime
 import gc
 from time import time
 from dateutil.relativedelta import relativedelta
+import os
+import sys
+import json
 
 def reduce_mem_usage(df, obj_to_cat=False, inplace=True):
     """ iterate through all the columns of a dataframe and modify the data type
@@ -138,3 +141,46 @@ def get_preds(stonks, test_start, end_date, train_months, intervals, model,
 
         print(f' {time() - start_iter :.2f} seconds.')
         del train, test, test_msk; gc.collect()
+
+
+def create_json(model_name, DIRECTORY = '/home/aott/Documents/python_scripts/kaggle_stonk_directories'):
+    '''
+    Creates the json file inside the directory "model_name".
+    Used for a kaggle kernel to be pushed to kaggle via api
+    INPUTS
+    ------
+    model_name: (str) the model to be ran on kaggle
+    DIRECTORY: (str) directory to put new folder, 'model_name', w/ json
+    '''
+    
+    TRIAL_NAME = sys.argv[1]
+    KAGGLE_NAME = 'Ottpocket' #sys.argv[2]
+
+    path = os.path.join(DIRECTORY, model_name)
+    if os.path.exists(path):
+        raise Exception('f{path} exists')
+    else:
+        os.mkdir(path)
+
+
+    #Creating a json file from dictionary
+    #help from https://pythonexamples.org/python-write-json-to-file/
+    json_dict = {
+      "id": f"{KAGGLE_NAME}/{model_name}",
+      "title": f"{model_name}",
+      "code_file": f"{model_name}.py",
+      "language": "python",
+      "kernel_type": "script",
+      "is_private": "true",
+      "enable_gpu": "false",
+      "enable_internet": "true",
+      "dataset_sources": ["ottpocket/daily-stonk-database"],
+      "competition_sources": [],
+      "kernel_sources": ["ottpocket/create-stonk-data-from-daily-prices"]
+    }
+
+    json_path = os.path.join(path, "kernel-metadata.json")
+    jsonString = json.dumps(json_dict)
+    jsonFile = open(json_path, "w")
+    jsonFile.write(jsonString)
+    jsonFile.close()TRIAL_NAME

@@ -145,12 +145,18 @@ def get_preds(stonks, test_start, end_date, train_months, intervals, model,
 
 def create_json(model_name, DIRECTORY = '/home/aott/Documents/python_scripts/kaggle_stonk_directories'):
     '''
-    Creates the json file inside the directory "model_name".
+    Creates a new directory inside 'DIRECTORY' named 'model_name'.
+    Adds a json file inside the newly created subdirectory.
     Used for a kaggle kernel to be pushed to kaggle via api
+
     INPUTS
     ------
     model_name: (str) the model to be ran on kaggle
     DIRECTORY: (str) directory to put new folder, 'model_name', w/ json
+
+    RETURNS
+    -------------
+    path: (str) path to the directory where json is placed
     '''
 
     TRIAL_NAME = sys.argv[1]
@@ -184,3 +190,5 @@ def create_json(model_name, DIRECTORY = '/home/aott/Documents/python_scripts/kag
     jsonFile = open(json_path, "w")
     jsonFile.write(jsonString)
     jsonFile.close()
+
+    return path

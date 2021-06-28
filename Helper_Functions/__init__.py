@@ -174,7 +174,7 @@ def create_json(model_name, DIRECTORY = '/home/aott/Documents/python_scripts/kag
     json_dict = {
       "id": f"{KAGGLE_NAME}/{model_name}",
       "title": f"{model_name}",
-      "code_file": f"{model_name}.py",
+      "code_file": f"run_model.py",
       "language": "python",
       "kernel_type": "script",
       "is_private": "true",

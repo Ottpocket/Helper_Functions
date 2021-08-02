@@ -143,7 +143,9 @@ def get_preds(stonks, test_start, end_date, train_months, intervals, model,
         del train, test, test_msk; gc.collect()
 
 
-def create_json(model_name, DIRECTORY):
+def create_json(model_name, DIRECTORY,
+                code_file = 'run_model.py'
+                kernel_sources = 'create-stonk-data-from-daily-prices'):
     '''
     Adds a json file inside DIRECTORY.
     Used for a kaggle kernel to be pushed to kaggle via api
@@ -152,6 +154,8 @@ def create_json(model_name, DIRECTORY):
     ------
     model_name: (str) the model to be ran on kaggle
     DIRECTORY: (str) directory to put json
+    code_file: (str) name of the actual code to be ran on kaggle
+    kernel_sources: (str) name of kernel with data being used
 
     RETURNS
     -------------
@@ -170,7 +174,7 @@ def create_json(model_name, DIRECTORY):
     json_dict = {
       "id": f"{KAGGLE_NAME}/{model_name}",
       "title": f"{model_name}",
-      "code_file": f"run_model.py",
+      "code_file": f"{code_file}",
       "language": "python",
       "kernel_type": "script",
       "is_private": "true",
@@ -178,7 +182,7 @@ def create_json(model_name, DIRECTORY):
       "enable_internet": "true",
       "dataset_sources": ["ottpocket/daily-stonk-database"],
       "competition_sources": [],
-      "kernel_sources": ["ottpocket/create-stonk-data-from-daily-prices"]
+      "kernel_sources": [f"ottpocket/{kernel_sources}"]
     }
 
     json_path = os.path.join(DIRECTORY, "kernel-metadata.json")
